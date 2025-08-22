@@ -1,0 +1,9 @@
+Manifest-Version: 1.0
+Implementation-Title: AquaSkills
+Implementation-Version: 1.12.2-3.1.1-universal
+Specification-Vendor: Waterdude Studios Ltd
+Specification-Title: aquaskills
+Implementation-Timestamp: 2021-10-22T17:23:47+0100
+Specification-Version: 1
+Implementation-Vendor: Waterdude Studios Ltd
+

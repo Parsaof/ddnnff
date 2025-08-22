@@ -1,0 +1,3 @@
+# Jars locaux non versionnés
+/libs/
+!libs/.gitkeep

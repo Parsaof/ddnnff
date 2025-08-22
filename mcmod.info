@@ -1,0 +1,16 @@
+[
+{
+  "modid": "aquaskills",
+  "name": "AquaSkills",
+  "description": "",
+  "version": "1.12.2-3.1.0-universal",
+  "mcversion": "1.12.2",
+  "url": "http://www.waterdu.de",
+  "updateUrl": "",
+  "authorList": ["Waterdude"],
+  "credits": "",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
+}
+]
