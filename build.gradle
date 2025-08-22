@@ -50,6 +50,7 @@ tasks.withType(JavaCompile).configureEach {
     options.encoding = "UTF-8"
 }
 
+// S'assure que mcmod.info est copié et que les variables ${version} sont remplacées
 processResources {
     inputs.property "version", project.version
     inputs.property "mcversion", "1.12.2"
@@ -63,8 +64,22 @@ processResources {
     }
 }
 
+// Génère le JAR reobfusqué attendu par un serveur 1.12.2
+jar.finalizedBy("reobfJar")
+
+
 jar {
     // Optionnel : si ton mod est pure serveur, tu peux documenter ça ici
     manifest { attributes("ModSide": "SERVER") }
 }
+jar.finalizedBy("reobfJar")
+
+jar {
+    manifest {
+        attributes(
+                "ModSide": "BOTH"
+        )
+    }
+}
+
 jar.finalizedBy("reobfJar")
