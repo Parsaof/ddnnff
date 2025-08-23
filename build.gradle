@@ -7,18 +7,25 @@ plugins {
 
 group = "de.waterdu.aquaskills"
 version = "3.1.1"
-base.archivesName = "AquaSkills-1.12.2-pixelmon"
 
-java.toolchain.languageVersion = JavaLanguageVersion.of(8)
+base {
+    archivesName = "AquaSkills-1.12.2-pixelmon"
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(8)
+    }
+}
 
 repositories {
     maven { url = "https://maven.minecraftforge.net" }
     mavenCentral()
-    flatDir { dirs "libs" }   // tes jars locaux (Pixelmon, etc.)
+    flatDir { dirs "libs" }   // Jars locaux (Pixelmon, AquaAPI, etc.)
 }
 
 minecraft {
-    // mappings stables pour 1.12.2
+    // Mappings stables 1.12.2
     mappings channel: "snapshot", version: "20171003-1.12"
 
     runs {
@@ -38,48 +45,42 @@ minecraft {
 dependencies {
     minecraft "net.minecraftforge:forge:1.12.2-14.23.5.2860"
 
-    // === Pixelmon (choisis UNE des 2 lignes suivantes) ===
-    // OPTION A : API dev locale
+    // --- Pixelmon (choisis UNE option et commente l'autre) ---
+    // OPTION A : API dev locale posée dans libs/
     // compileOnly name: "Pixelmon-API-8.4.3"
 
-    // OPTION B : universal locale (déobfusquée à la volée)
+    // OPTION B : Universal locale (déobfusquée à la volée)
     // implementation fg.deobf(files("libs/Pixelmon-1.12.2-8.4.3-universal.jar"))
+
+    // --- AquaAPI (si tu l'utilises) ---
+    // implementation files("libs/AquaAPI-1.12.2.jar")
 }
 
 tasks.withType(JavaCompile).configureEach {
     options.encoding = "UTF-8"
 }
 
-// S'assure que mcmod.info est copié et que les variables ${version} sont remplacées
 processResources {
     inputs.property "version", project.version
     inputs.property "mcversion", "1.12.2"
 
+    // Remplace ${version}/${mcversion} dans mcmod.info
     from(sourceSets.main.resources.srcDirs) {
         include "mcmod.info"
         expand "version": project.version, "mcversion": "1.12.2"
     }
+    // Copie le reste tel quel
     from(sourceSets.main.resources.srcDirs) {
         exclude "mcmod.info"
     }
 }
 
-// Génère le JAR reobfusqué attendu par un serveur 1.12.2
-jar.finalizedBy("reobfJar")
-
-
 jar {
-    // Optionnel : si ton mod est pure serveur, tu peux documenter ça ici
-    manifest { attributes("ModSide": "SERVER") }
-}
-jar.finalizedBy("reobfJar")
-
-jar {
+    from sourceSets.main.output
     manifest {
-        attributes(
-                "ModSide": "BOTH"
-        )
+        attributes("ModSide": "BOTH")
     }
 }
 
-jar.finalizedBy("reobfJar")
+// Génère le jar re-obfusqué utilisable côté serveur
+tasks.named("jar").configure { finalizedBy("reobfJar") }
